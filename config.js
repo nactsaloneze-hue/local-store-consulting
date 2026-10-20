@@ -12,8 +12,8 @@ window.LP_CONFIG = {
      duration:'30分', report:false, startTiming:'', formUrl:''},
     {id:'strategy', name:'地域集客戦略コンサルティング', price:33000,
      duration:'90分', report:true, startTiming:'', reportDelivery:'', formUrl:''},
-    {id:'support', name:'集客戦略・実行サポート', price:110000,
-     duration:'90分 × 2回', report:true, startTiming:'', reportDelivery:'', formUrl:'',
+    {id:'support', name:'集客戦略・実行サポート', price:120000,
+     duration:'90分 × 4回', report:true, startTiming:'', reportDelivery:'', formUrl:'',
      supportDays:30, supportMethod:'', supportScope:'', replyTime:'', supportStart:''}
   ]
 };
