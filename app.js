@@ -22,27 +22,21 @@ if(support){
 }
 legalKeys.forEach(key=>{const el=document.querySelector('[data-legal="'+key+'"]');const url=safeUrl(c[key]);if(url){el.href=url;el.hidden=false;}});
 if(legalKeys.every(k=>safeUrl(c[k])))document.getElementById('legal-pending').hidden=true;
-const ready = p => Boolean(p && c.acceptingApplications===true && filled(c.reservationMethod) && legalKeys.every(k=>safeUrl(c[k])) && safeUrl(p.formUrl) && filled(p.startTiming) && Number.isFinite(p.price) && p.price>0 && filled(p.duration) && (!p.report||filled(p.reportDelivery)) && (p.id!=='support'||['supportMethod','supportScope','replyTime','supportStart'].every(k=>filled(p[k]))));
+const ready = p => Boolean(p && c.acceptingApplications===true && safeUrl(p.formUrl));
 const select=document.getElementById('plan-choice');
 const selection=document.getElementById('selected-plan');
 const updateSelection = () => {
  const p=plans.find(p=>p.id===select.value);
  selection.textContent=p?p.name+' ／ '+p.price.toLocaleString('ja-JP')+'円（税込）':select.options[select.selectedIndex].text;
- const a=document.getElementById('apply-link');a.hidden=true;a.removeAttribute('href');
- document.getElementById('apply-heading').textContent='現在、受付準備中です';
- document.getElementById('apply-message').textContent='ご希望のプランを確認できます。提供条件・申込先の設定後に受付を開始します。';
- document.getElementById('apply-closed').hidden=false;
- if(ready(p)){
-  a.href=safeUrl(p.formUrl);a.textContent='このプランの申込フォームへ進む ↗';a.hidden=false;
-  document.getElementById('apply-heading').textContent='選択したプランのお申込み';
-  document.getElementById('apply-message').textContent='内容と各規定をご確認のうえ、申込フォームへお進みください。フォームでも希望プランをご確認ください。送信後、メールで決済方法をご案内します。';
-  document.getElementById('apply-closed').hidden=true;
- }
+ const a=document.getElementById('apply-link');
+ a.hidden=!ready(p);
+ if(ready(p))a.href=safeUrl(p.formUrl);
+ else a.removeAttribute('href');
 };
 select.addEventListener('change',updateSelection);
 document.querySelectorAll('[data-select-plan]').forEach(a=>a.addEventListener('click',()=>{select.value=a.dataset.selectPlan;updateSelection();}));
 document.querySelectorAll('[data-plan-card]').forEach(card=>{const p=plans.find(p=>p.id===card.dataset.planCard);if(ready(p))card.querySelector('.plan-status').textContent='フォーム送信後、メールで決済方法をご案内します。';});
-if(plans.some(ready))document.querySelector('.hero .availability').textContent='プランごとの提供条件・受付状況をご確認ください。';
+if(plans.some(ready))document.querySelector('.hero .availability').textContent='フォーム送信後、メールで決済方法をご案内します。';
 updateSelection();
 const dialog=document.getElementById('image-dialog');let opener;
 document.querySelectorAll('.report-zoom').forEach(btn=>btn.addEventListener('click',()=>{opener=btn;const img=document.getElementById('dialog-image');img.src=btn.dataset.image;img.alt=btn.querySelector('img').alt;dialog.showModal();document.body.style.overflow='hidden';}));
